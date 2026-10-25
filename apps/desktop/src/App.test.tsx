@@ -93,7 +93,7 @@ const demo: Demo = {
       "synth.cymbal.01",
     ],
   },
-  hardware_status: "Hardware locked",
+  hardware_status: "Synthetic workspace",
 };
 const plan: ChangePlan = {
   format_version: 1,
@@ -145,7 +145,7 @@ beforeEach(() => {
 describe("kit editing through the Rust dispatcher", () => {
   it("shows the simulator, four slots, and locks Apply until a plan exists", async () => {
     await openEditor();
-    expect(screen.getByText("Hardware locked")).toBeVisible();
+    expect(screen.getByText("Offline workspace")).toBeVisible();
     expect(
       within(screen.getByLabelText("Kit slots")).getAllByRole("button"),
     ).toHaveLength(4);

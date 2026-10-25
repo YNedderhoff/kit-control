@@ -276,7 +276,7 @@ export function App({ client = core }: { client?: CoreClient }) {
                 ? "Starting simulator"
                 : "Core unavailable"}
           </strong>
-          <span className="hardware-lock">Hardware locked</span>
+          <span className="hardware-lock">Offline workspace</span>
         </div>
       </header>
 
@@ -340,7 +340,7 @@ export function App({ client = core }: { client?: CoreClient }) {
           <span>{notice}</span>
         ) : (
           <span>
-            Offline editing · synthetic parameters · hardware writes disabled
+            Offline editing · synthetic parameters · document simulator
           </span>
         )}
       </div>
@@ -406,8 +406,8 @@ export function App({ client = core }: { client?: CoreClient }) {
             <span aria-hidden="true">◎</span>
             <strong>Simulator only</strong>
             <p>
-              These kits use a synthetic profile. Real devices and manufacturer
-              formats are not enabled.
+              These kits use the workspace simulator. Open the TD-27 device
+              editor for native MIDI.
             </p>
           </div>
         </aside>
@@ -790,8 +790,8 @@ export function App({ client = core }: { client?: CoreClient }) {
           KitControl <span className="footer-version">/ 0.1</span>
         </span>
         <span>
-          {demo ? demo.profile.name : "Core connection required"} · Hardware
-          writes disabled
+          {demo ? demo.profile.name : "Core connection required"} · Workspace
+          simulator
         </span>
       </footer>
     </div>
