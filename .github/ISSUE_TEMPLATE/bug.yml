@@ -1,0 +1,28 @@
+name: Bug report or hardware test report
+description: Report a reproducible failure or a bounded hardware test.
+body:
+  - type: input
+    id: revision
+    attributes:
+      label: KitControl commit or version
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and evidence level
+      description: OS, architecture, GUI or CLI, synthetic simulator or physical model and firmware. State exactly what was tested.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps, expected result and actual result
+      description: Use synthetic data where possible. Do not attach purchased kits, samples or personal backups.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources and diagnostics
+      description: Link relevant official documentation. Review logs for private content before sharing.

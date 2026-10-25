@@ -1,0 +1,77 @@
+name: Checks and desktop builds
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            bundles: deb
+          - os: macos-15
+            bundles: app
+          - os: windows-2025
+            bundles: nsis
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+      - name: Install Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      - name: Install locked frontend dependencies
+        working-directory: apps/desktop
+        run: npm ci
+      - name: Check frontend and build bundle
+        working-directory: apps/desktop
+        run: npm run build
+      - name: Test frontend
+        working-directory: apps/desktop
+        run: npm test
+      - name: Check Rust formatting
+        run: cargo fmt --all --check
+      - name: Check Rust warnings
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Test core, CLI and desktop boundary
+        run: cargo test --workspace --locked
+      - name: Build standalone CLI
+        run: cargo build -p kitcontrol-cli --release --locked
+      - name: Build unsigned desktop package
+        working-directory: apps/desktop
+        run: npm run tauri -- build --bundles ${{ matrix.bundles }} -- --locked
+      - name: Upload development artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: kitcontrol-development-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            target/release/kitcontrol
+            target/release/kitcontrol.exe
+            target/release/bundle/
+            LICENSE
+            NOTICE
+            THIRD_PARTY_RUST.md
+            THIRD_PARTY_FRONTEND.txt
+            third-party/

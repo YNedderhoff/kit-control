@@ -1,0 +1,57 @@
+{
+  "format_version": 1,
+  "profile_id": "kitcontrol.synthetic.v1",
+  "document_id": "test-archive",
+  "kits": {
+    "amber": {
+      "name": "Amber test kit",
+      "pads": {
+        "snare.head": {
+          "instrument": "synth.snare.01",
+          "tuning": -17,
+          "muffling": 3,
+          "volume": 72,
+          "pan": -11,
+          "sub_instrument": "synth.tom.01",
+          "layer_level": 29
+        }
+      },
+      "effects": {"test-room": {"level": 23, "enabled": true}},
+      "opaque": {"test-extension": [0, 19, 128, 255]}
+    },
+    "blue": {
+      "name": "Blue test kit",
+      "pads": {
+        "kick.head": {
+          "instrument": "synth.kick.01",
+          "tuning": 8,
+          "muffling": 6,
+          "volume": 91,
+          "pan": 12,
+          "sub_instrument": null,
+          "layer_level": 0
+        }
+      },
+      "effects": {"test-room": {"level": 7, "enabled": false}},
+      "opaque": {"target-extension": [42, 0, 201]}
+    },
+    "spare": {
+      "name": "Library test kit",
+      "pads": {
+        "cymbal.edge": {
+          "instrument": "synth.cymbal.01",
+          "tuning": 2,
+          "muffling": 1,
+          "volume": 44,
+          "pan": 0,
+          "sub_instrument": null,
+          "layer_level": 0
+        }
+      },
+      "effects": {},
+      "opaque": {"library-extension": [17]}
+    }
+  },
+  "slots": ["amber", "blue"],
+  "setlists": [{"name": "Test order", "slots": [1, 2, 1]}]
+}

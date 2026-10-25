@@ -1,0 +1,2 @@
+# Preserve generated upstream license text, including original whitespace.
+THIRD_PARTY_RUST.md -text -whitespace

@@ -1,0 +1,14 @@
+KitControl
+https://github.com/YNedderhoff/kit-control
+Copyright 2026 Yanick Nedderhoff and KitControl contributors
+
+This product includes original work licensed under the Apache License,
+Version 2.0. See LICENSE.
+
+KitControl is an independent project. Roland and referenced product names
+belong to their respective owners. No affiliation or endorsement is claimed.
+
+Research inspiration is recorded in ACKNOWLEDGEMENTS.md. No third-party
+code, protocol tables, schemas, samples, or device data were incorporated
+from those research sources in the initial synthetic implementation.
+Third-party package dependencies retain their own licenses and notices.
