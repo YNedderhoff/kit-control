@@ -10,7 +10,7 @@ This record distinguishes implemented behavior, automated checks, native runtime
 | TD-27 CLI integration | 4 real subprocess tests passed against the production packet emulator |
 | Offline core and CLI integration | 21 core tests and 12 subprocess tests passed |
 | Complete Rust workspace | All 64 tests passed; formatting and Clippy with warnings denied passed |
-| Frontend | 17 behavior tests passed; TypeScript and production bundle passed |
+| Frontend | 18 behavior tests passed; TypeScript and production bundle passed |
 | macOS native package | Unsigned ARM64 app built at the final checkout location; current license texts and all five bundled MPL source archives checked against the source files and Cargo.lock |
 | Native MIDI discovery | Standalone CLI and native desktop IPC both returned zero inputs and outputs with no device attached. CoreMIDI initialization requires execution outside the restricted agent shell sandbox |
 | Native TD-27 GUI/client integration | Built app read the packet emulator, changed tempo 120 to 126 and enabled the snare compressor, displayed addresses `04 00 00 2E` and `04 01 41 01`, applied, and returned 2 sent / 2 verified / 2 total |
@@ -29,6 +29,6 @@ The production emulator is a useful application test mode, not the sole correctn
 
 ## Review and limits
 
-An independent review prompted fixes for native endpoint binding, documented nonprintable name bytes, stopping sends after a latched native queue overflow, and final verification counts. Regression tests cover endpoint binding, name preservation, and final read failure/mismatch. Overflow handling was reviewed in source; a physical native overflow was not induced. Re-review found no remaining actionable issue in those fixes. Earlier storage review prompted atomic no-clobber creation, mismatch-injection and journal-ordering fixes.
+An independent review prompted fixes for native endpoint binding, documented nonprintable name bytes, stopping sends after a latched native queue overflow, and final verification counts. Regression tests cover endpoint binding, name preservation, and final read failure/mismatch. Overflow handling was reviewed in source; a physical native overflow was not induced. Re-review found no remaining actionable issue in those fixes. Earlier storage review prompted atomic no-clobber creation, mismatch-injection and journal-ordering fixes. The first macOS CI run exposed a numeric input lifecycle race in the offline editor. Numeric fields now reset by committed-value keys, without a competing passive effect. A delayed-core regression covers the first edit, pending state, undo/redo and load; the complete frontend suite passed twice after the fix.
 
 The snapshot covers only Kit Common and twelve Pad blocks. It is neither a complete kit nor a sample backup. No physical module is attached. Native MIDI packet delivery, module persistence, real-world timing, and restoration remain unverified until the [hardware procedure](hardware-test-protocol.md) runs. Port names and baseline equality do not provide a unique physical serial identity or atomic device transactions. Screenshots and mocked UI tests do not prove hardware compatibility; a file checksum does not prove device restoration.

@@ -48,9 +48,6 @@ function NumberField({
 }) {
   const [draft, setDraft] = useState(String(value));
   const cancelBlur = useRef(false);
-  useEffect(() => {
-    setDraft(String(value));
-  }, [value]);
   return (
     <label className="parameter">
       <span>
@@ -599,6 +596,7 @@ export function App({ client = core }: { client?: CoreClient }) {
               <div className="parameter-group">
                 <span className="eyebrow">SHAPE</span>
                 <NumberField
+                  key={`tuning:${pad.tuning}`}
                   label="Tuning"
                   value={pad.tuning}
                   min={-100}
@@ -607,6 +605,7 @@ export function App({ client = core }: { client?: CoreClient }) {
                   onCommit={(value) => setParameter("tuning", value)}
                 />
                 <NumberField
+                  key={`muffling:${pad.muffling}`}
                   label="Muffling"
                   value={pad.muffling}
                   min={0}
@@ -618,6 +617,7 @@ export function App({ client = core }: { client?: CoreClient }) {
               <div className="parameter-group">
                 <span className="eyebrow">MIX</span>
                 <NumberField
+                  key={`volume:${pad.volume}`}
                   label="Volume"
                   value={pad.volume}
                   min={0}
@@ -626,6 +626,7 @@ export function App({ client = core }: { client?: CoreClient }) {
                   onCommit={(value) => setParameter("volume", value)}
                 />
                 <NumberField
+                  key={`pan:${pad.pan}`}
                   label="Pan"
                   value={pad.pan}
                   min={-30}
@@ -655,6 +656,7 @@ export function App({ client = core }: { client?: CoreClient }) {
                   </select>
                 </label>
                 <NumberField
+                  key={`layer_level:${pad.layer_level}`}
                   label="Layer level"
                   value={pad.layer_level}
                   min={0}

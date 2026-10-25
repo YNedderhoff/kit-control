@@ -1,4 +1,5 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -116,6 +117,13 @@ const verified: ApplyReport = {
 function reply(result: unknown) {
   return { api_version: 1, ok: true, result };
 }
+function pendingResponse() {
+  let resolve!: (value: unknown) => void;
+  const promise = new Promise<unknown>((finish) => {
+    resolve = finish;
+  });
+  return { promise, resolve: (value: unknown) => resolve(value) };
+}
 async function openEditor() {
   render(<App />);
   await screen.findByRole("heading", { name: "Studio One" });
@@ -181,6 +189,90 @@ describe("kit editing through the Rust dispatcher", () => {
       ),
     );
     expect(mockedInvoke).toHaveBeenCalledTimes(2);
+  });
+
+  it("commits the first numeric edit after delayed startup and restores committed values through history and loading", async () => {
+    const startup = pendingResponse();
+    const editResponse = pendingResponse();
+    const loadResponse = pendingResponse();
+    const loaded: Document = {
+      ...document,
+      kits: {
+        ...document.kits,
+        a: {
+          ...document.kits.a,
+          pads: {
+            ...document.kits.a.pads,
+            "snare.head": {
+              instrument: "synth.snare.01",
+              tuning: -25,
+              muffling: 7,
+              volume: 41,
+              pan: -10,
+              sub_instrument: null,
+              layer_level: 65,
+            },
+          },
+        },
+      },
+    };
+    mockedInvoke.mockReset();
+    mockedInvoke
+      .mockReturnValueOnce(startup.promise)
+      .mockReturnValueOnce(editResponse.promise)
+      .mockReturnValueOnce(loadResponse.promise);
+    render(<App />);
+    expect(
+      screen.queryByRole("spinbutton", { name: "Tuning" }),
+    ).not.toBeInTheDocument();
+    await act(async () => {
+      startup.resolve(reply(structuredClone(demo)));
+    });
+    const tuning = screen.getByRole("spinbutton", { name: "Tuning" });
+    fireEvent.change(tuning, { target: { value: "12" } });
+    fireEvent.blur(tuning);
+    expect(mockedInvoke).toHaveBeenNthCalledWith(2, "dispatch", {
+      request: {
+        action: "edit",
+        document,
+        operation: {
+          kind: "set_parameter",
+          kit_id: "a",
+          pad: "snare.head",
+          parameter: "tuning",
+          value: 12,
+        },
+      },
+    });
+    expect(tuning).toHaveValue(12);
+    expect(tuning).toBeDisabled();
+    await act(async () => {
+      editResponse.resolve(reply(structuredClone(edited)));
+    });
+    expect(screen.getByRole("spinbutton", { name: "Tuning" })).toHaveValue(12);
+    expect(screen.getByText("Unsaved changes")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getByRole("spinbutton", { name: "Tuning" })).toHaveValue(0);
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(screen.getByRole("spinbutton", { name: "Tuning" })).toHaveValue(12);
+    fireEvent.change(
+      screen.getByRole("textbox", { name: "Workspace folder" }),
+      { target: { value: "/tmp/lifecycle-kits" } },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Load" }));
+    expect(mockedInvoke).toHaveBeenLastCalledWith("dispatch", {
+      request: { action: "load", path: "/tmp/lifecycle-kits" },
+    });
+    await act(async () => {
+      loadResponse.resolve(reply(loaded));
+    });
+    expect(screen.getByRole("spinbutton", { name: "Tuning" })).toHaveValue(-25);
+    expect(screen.getByRole("spinbutton", { name: "Muffling" })).toHaveValue(7);
+    expect(screen.getByRole("spinbutton", { name: "Volume" })).toHaveValue(41);
+    expect(screen.getByRole("spinbutton", { name: "Pan" })).toHaveValue(-10);
+    expect(screen.getByRole("spinbutton", { name: "Layer level" })).toHaveValue(
+      65,
+    );
   });
 
   it("requires a reviewed plan, applies it, and displays the core readback report", async () => {

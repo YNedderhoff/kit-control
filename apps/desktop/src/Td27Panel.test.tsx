@@ -13,11 +13,32 @@ const snapshot: Td27Snapshot = {
   endpoint: null,
   identity: {
     device_id: 16,
-    software_revision: [2, 0, 0, 0],
+    software_revision: [0, 0, 0, 2],
     firmware: "2.00",
   },
   kit: 1,
-  blocks: [{ address: [16, 0, 0, 15], data: [0, 120] }],
+  blocks: [
+    // Handwritten interface expectations: Kit Common and twelve Pad blocks.
+    { address: [4, 0, 0, 0], data: [
+      83, 116, 117, 100, 105, 111, 32, 79, 110, 101, 32, 32,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      7, 8, 0, 0,
+    ] },
+    { address: [4, 1, 64, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 65, 0], data: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 66, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 67, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 68, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 69, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 70, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 71, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 72, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 73, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 74, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { address: [4, 1, 75, 0], data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  ],
   parameters: {
     "kit.name": "Studio One",
     "kit.tempo": 120,
@@ -40,7 +61,16 @@ const snapshot: Td27Snapshot = {
 };
 const changedSnapshot: Td27Snapshot = {
   ...snapshot,
-  blocks: [{ address: [16, 0, 0, 15], data: [0, 125] }],
+  blocks: [
+    { address: [4, 0, 0, 0], data: [
+      83, 116, 117, 100, 105, 111, 32, 79, 110, 101, 32, 32,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      7, 13, 0, 0,
+    ] },
+    ...snapshot.blocks.slice(1),
+  ],
   parameters: { ...snapshot.parameters, "kit.tempo": 125 },
 };
 const plan: Td27Plan = {
@@ -51,9 +81,9 @@ const plan: Td27Plan = {
   writes: [
     {
       key: "kit.tempo",
-      address: [16, 0, 0, 15],
-      before: [0, 120],
-      after: [0, 125],
+      address: [4, 0, 0, 46],
+      before: [0, 0, 7, 8],
+      after: [0, 0, 7, 13],
     },
   ],
 };
@@ -167,9 +197,9 @@ describe("TD-27 device integration", () => {
       screen.getByRole("button", { name: /Apply to TD-27/ }),
     ).toBeDisabled();
     await planTempo();
-    expect(screen.getByRole("cell", { name: "10 00 00 0F" })).toBeVisible();
-    expect(screen.getByRole("cell", { name: "00 78" })).toBeVisible();
-    expect(screen.getByRole("cell", { name: "00 7D" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "04 00 00 2E" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "00 00 07 08" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "00 00 07 0D" })).toBeVisible();
     expect(mockedInvoke).toHaveBeenNthCalledWith(3, "dispatch", {
       request: {
         action: "td27_plan",
