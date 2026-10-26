@@ -9,6 +9,7 @@ The initial research pass ran on 25 October 2026. Search terms included `TD-27 e
 | Source | Relevance and limits |
 | --- | --- |
 | [Roland TD-27 MIDI implementation](https://static.roland.com/assets/media/pdf/TD-27_MIDI_Imple_eng04_W.pdf) | Document version 2.00, 11 August 2022. Interface reference for independently written TD-27 MIDI code; manual not bundled; connected firmware must be checked separately |
+| [Roland TD-27 Reference Manual](https://static.roland.com/assets/media/pdf/TD-27_Reference_eng02_W.pdf) | Native backup and user-sample procedure reference retained from preparation; consult the version applicable to the connected device before the hardware session; not bundled; no physical backup/restore test claimed |
 | [Roland Germany terms of use](https://www.roland.com/de/terms_of_use/) | Software-download terms and documentation scope; concrete publication applicability remains unresolved; no bundled manufacturer content |
 | [German Copyright Act §69a](https://www.gesetze-im-internet.de/urhg/__69a.html) | Legal background; not a blanket interoperability clearance |
 | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt) | Project license text |

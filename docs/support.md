@@ -6,9 +6,9 @@
 | Synthetic document simulator | Offline workspace development mode | Local core/CLI integration and native macOS workflow |
 | TD-27 packet emulator | Same MIDI client as native transport; invented parameter values and fault injection | Independent packet, CLI, UI and native macOS emulator checks; see verification record |
 | macOS desktop | Tauri 2 and React | ARM64 app built and native edit/plan/apply/save workflow checked |
-| Linux desktop | Tauri 2 and React | CI configured; native run not yet verified |
-| Windows desktop | Tauri 2 and React | CI configured; native run not yet verified |
-| Roland TD-27 firmware 2.00 | Native MIDI identity, partial snapshot, planned supported-field writes, readback | No physical device attached or tested |
+| Linux desktop | Tauri 2 and React | CI build/package passed for the recorded revision; native GUI/MIDI runtime not yet verified |
+| Windows desktop | Tauri 2 and React | CI build/package passed for the recorded revision; native GUI/MIDI runtime not yet verified |
+| Roland TD-27 firmware 2.00 | Native MIDI identity, partial snapshot, planned supported-field writes, readback | No physical device test recorded |
 | Other firmware / modules | Outside the initial profile | Unsupported |
 | Roland backup formats and samples | Outside the implemented parameter scope | None |
 | Mobile | Later work | None |

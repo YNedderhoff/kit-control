@@ -50,7 +50,9 @@ These actions use the same dispatcher from `kitcontrol request` and Tauri. They 
 | `td27_plan` | `baseline` snapshot, `changes` object | Validated field write plan; no MIDI writes |
 | `td27_apply` | `target`, reviewed `plan` | Report with status, write/readback counts, message, and optional resulting snapshot |
 
-Select a target explicitly. Native targets provide `transport: "native"`, `input`, `output`, `device_id`, and `firmware`. Use the exact unique port-name strings returned in `inputs` and `outputs` by `midi_ports`. Native snapshots retain these names in `endpoint`; a plan cannot be applied using different ports. MIDI identity exposes no unique serial number, so reused port names do not prove the same physical unit is still attached. The GUI names this mode **Sandbox (TD-27 emulator)**. Emulator targets provide `transport: "emulator"`, optional `state`, and optional `device_id`, `firmware`, and `fault`. Emulator defaults are device ID `16`, firmware `"2.00"`, and fault `"none"`. Both transports use the same packet client.
+Select a target explicitly. Native targets provide `transport: "native"`, `input`, `output`, `device_id`, and `firmware`. Use the exact unique port-name strings returned in `inputs` and `outputs` by `midi_ports`. Native snapshots retain these names in `endpoint`; a plan cannot be applied using different ports. MIDI identity exposes no unique serial number, so reused port names do not prove the same physical unit is still attached.
+
+The GUI names emulator mode **Sandbox (TD-27 emulator)**. Emulator targets provide `transport: "emulator"`, optional `state`, and optional `device_id`, `firmware`, and `fault`. Emulator defaults are device ID `16`, firmware `"2.00"`, and fault `"none"`. Both transports use the same packet client.
 
 The API device ID is the wire value 16–31, corresponding to the module display 17–32. The initial profile requires exact declared firmware `"2.00"`. Check the module before declaring it; the identity reply's `software_revision` is retained but does not establish full firmware version.
 

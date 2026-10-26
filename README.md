@@ -30,7 +30,9 @@ This is an early development implementation, not a hardware-verified release. Th
 
 The first adapter reads the Kit Common block and twelve Pad blocks. It exposes kit name, tempo, tempo switch, brush switch, cross-stick switch, and twelve pad compressor switches for planned writes. This is a **partial parameter snapshot**, not a full kit, sample, or native backup. Native kit copy, tuning, and reordering remain pending. The synthetic workspace editor retains those operations as a separate development mode.
 
-The CLI and desktop application use the same JSON dispatcher. See the [API contract](docs/api.md), [architecture](docs/architecture.md), [roadmap](docs/roadmap.md), and [verification record](docs/verification.md) for exact scope and executed checks.
+The CLI and desktop application use the same JSON dispatcher. The [development plan](docs/plan.md) records the full agreed scope; the [roadmap and implementation audit](docs/roadmap.md) identify what is implemented and still missing. The [verification record](docs/verification.md) owns executed-check evidence. See the [architecture](docs/architecture.md) and [API contract](docs/api.md) for current technical behavior.
+
+For a new development task, start with [docs/handoff.md](docs/handoff.md). It links the project record and defines the next bounded task: plan the first physical TD-27 session, initially read-only. The full kit-editing MVP remains incomplete.
 
 ## Build and run
 

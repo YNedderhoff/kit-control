@@ -16,9 +16,15 @@ This record distinguishes implemented behavior, automated checks, native runtime
 | Native MIDI discovery | Standalone CLI and native desktop IPC both returned zero inputs and outputs with no device attached. CoreMIDI initialization requires execution outside the restricted agent shell sandbox |
 | Native TD-27 GUI/client integration | Built app read the packet emulator, changed tempo 120 to 126 and enabled the snare compressor, displayed addresses `04 00 00 2E` and `04 01 41 01`, applied, and returned 2 sent / 2 verified / 2 total |
 | Native offline workspace | Earlier app run changed snare tuning 0 to 7, reviewed/applied against the document simulator, and saved a five-file workspace; the resulting kit file contained tuning 7 |
-| Linux / Windows | GitHub Actions configured; results are reported separately for the pushed commit |
+| Linux / Windows | CLI and desktop packaging passed for the CI source revision below; physical MIDI, install and GUI runtime remain unverified |
 | Physical Roland or other module | No physical transfer or recovery test; firmware of the personal TD-27 remains unknown |
 | Save recovery | Process-interruption paths covered; power loss, full SD backup restoration, and sample recovery not tested |
+
+## CI evidence
+
+The completed [Checks and desktop builds run 40247646699](https://github.com/YNedderhoff/kit-control/actions/runs/40247646699) is for source commit `811c03910e860e6785ec734894da285e038d2ff6`. Its macOS 15, Ubuntu 24.04 and Windows 2025 jobs all succeeded, including tests, CLI builds, unsigned desktop packaging, and artifact upload. The explicit virtual-CoreMIDI test succeeded on macOS; that platform-specific step was skipped on Linux and Windows. The three development artifacts were present when inspected on 26 October 2026. CI does not establish GUI installation/runtime or physical MIDI on Linux/Windows.
+
+This immutable result is the evidence used by the [implementation audit](roadmap.md). Later documentation or source commits have their own workflow runs; do not attribute this run to a different SHA. The plan-consolidation audit inspected source/tests and CI metadata without rerunning local tests or accessing hardware.
 
 ## Independent TD-27 expectations
 
@@ -34,4 +40,4 @@ The production emulator is a useful application test mode, not the sole correctn
 
 An independent review prompted fixes for native endpoint binding, documented nonprintable name bytes, stopping sends after a latched native queue overflow, and final verification counts. Regression tests cover endpoint binding, name preservation, and final read failure/mismatch. Overflow handling was reviewed in source; a physical native overflow was not induced. Re-review found no remaining actionable issue in those fixes. Earlier storage review prompted atomic no-clobber creation, mismatch-injection and journal-ordering fixes. The first macOS CI run exposed a numeric input lifecycle race in the offline editor. Numeric fields now reset by committed-value keys, without a competing passive effect. A delayed-core regression covers the first edit, pending state, undo/redo and load; the complete frontend suite passed twice after the fix. The rebuilt native app also accepted a first tuning edit from 0 to 9 and Undo restored 0.
 
-The snapshot covers only Kit Common and twelve Pad blocks. It is neither a complete kit nor a sample backup. No physical module is attached. Delivery to a physical module, module persistence, USB/DIN timing, and restoration remain unverified until the [hardware procedure](hardware-test-protocol.md) runs. Port names and baseline equality do not provide a unique physical serial identity or atomic device transactions. Screenshots and mocked UI tests do not prove hardware compatibility; a file checksum does not prove device restoration.
+The snapshot covers only Kit Common and twelve Pad blocks. It is neither a complete kit nor a sample backup. No physical module was used in those checks. Delivery to a physical module, module persistence, USB/DIN timing, and restoration remain unverified until the [hardware procedure](hardware-test-protocol.md) runs. Port names and baseline equality do not provide a unique physical serial identity or atomic device transactions. Screenshots and mocked UI tests do not prove hardware compatibility; a file checksum does not prove device restoration.
