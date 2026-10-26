@@ -32,13 +32,13 @@ Use `passed`, `failed` or `untested` for each check. Leave unknown facts explici
 | Current sample count, coverage/age and any uncertainty | Untested | |
 | New backup archived and checked against inventory | Untested | |
 | Local archive outside app checkout and retained SD originals | Untested | |
-| Private remote visibility, file list/LFS limits reviewed; upload authorized | Untested | |
-| Fresh remote clone and LFS fetch with isolated storage, no shared cache | Untested | |
+| Private remote visibility, file list and host limits reviewed; upload authorized | Untested | |
+| Fresh network clone, no alternates/shared storage; isolated LFS fetch only if used | Untested | |
 | All inventoried files materialized at recorded revisions; sizes/hashes match | Untested | |
 | Overall gate | Untested | No physical MIDI until passed |
 | Device/module/sample restore | Untested | Not part of this session |
 
-Record private archive/repository locations and data commit separately. State which actual binaries are held in the local archive and LFS storage, which text/references are in Git, and which tools/driver/settings must be recreated. File retrieval is not device recovery.
+Record private archive/repository locations and the exact pushed/retrieved data commit separately. State which actual binaries and text records are held in the local archive and ordinary Git, and which tools/driver/settings must be recreated. If LFS is explicitly used, distinguish its pointers from the actual retrieved objects. File retrieval is not device recovery.
 
 ## Frozen independent expectations
 
