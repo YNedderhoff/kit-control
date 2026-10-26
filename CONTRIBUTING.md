@@ -6,7 +6,7 @@ Implement hardware support through documented MIDI interfaces. Record exact inte
 
 Tests must specify expected values independently of production constants and logic. Cover relevant invalid input, stale state, partial completion, and readback failure. Test through the affected public integration, and report exactly which checks ran. Simulator success does not establish hardware compatibility.
 
-Before completion, review the final diff for correctness, maintainability, security, and affected documentation. For non-trivial changes, obtain an independent review when available. Maintainers remain responsible for manual review of AI-assisted changes. Changes must pass the applicable CI checks and receive human approval before merging; do not enable automatic merges. These are contribution requirements, not a claim that repository branch protection has been configured.
+Before completion, review the final diff for correctness, maintainability, security, and affected documentation. For non-trivial changes, obtain an independent review when available. Maintainers remain responsible for manual review of AI-assisted changes. Changes must pass the applicable CI checks and receive human approval before merging; do not enable automatic merges. The [dependency operating guide](docs/current/dependencies.md) describes the GitHub check gate and its separate activation verification.
 
 Use Conventional Commits with English imperative titles of at most 72 characters. Add an `AI-Model:` trailer for AI-assisted commits. Use an exact identifier only when known reliably; otherwise record the known family with `(exact variant unavailable)`, or `unknown (tool name)` if the family is unknown. Never infer a model from an available-model list.
 

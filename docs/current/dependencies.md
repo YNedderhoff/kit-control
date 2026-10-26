@@ -50,19 +50,21 @@ Local checks on 26 October 2026 passed: 21 maintenance tests, 19 frontend tests,
 
 Renovate 44.182.0's strict validator passed on its supported Node 24 runtime. A read-only local extraction found all five managers and ten representative rule evaluations confirmed routine groups, Tauri grouping, major/pre-1.0 separation and toolchain separation. Local extraction reported limitations for owner presets and missing authenticated GitHub lookup; it does not establish hosted scheduling or security-fix operation.
 
-| External setting | Last checked state on 26 October 2026 |
+The [initial CI run 40320525240](https://github.com/YNedderhoff/kit-control/actions/runs/40320525240) passed for implementation commit `0364800ad4b094cb74a58317319a33958dd96ec4`: `dependency-checks` and the macOS 15, Ubuntu 24.04 and Windows 2025 build jobs all succeeded. This includes the fresh Linux notice/source check and the explicit virtual-CoreMIDI test on macOS. The corresponding native test was skipped on Linux/Windows. The run does not establish physical hardware or installed GUI behavior; documentation-only follow-ups have separate CI runs.
+
+| External setting | Activation evidence and authoritative state |
 | --- | --- |
 | Dependabot alerts | Enabled through the API and read back successfully |
-| Dependency graph | Eight manifests visible after alerts were enabled; dependency indexing still pending at that inspection |
+| Dependency graph | Eight manifests visible after alerts were enabled; a transitive Cargo advisory was detected. GraphQL returned zero dependency counts, so those counts do not establish graph completeness |
 | Dependabot automatic security PRs | Disabled, confirmed through repository settings |
 | Auto-merge | Disabled |
-| Renovate App | Installation not verified; available browser session requires owner sign-in |
-| Required checks / `main` ruleset | Pending the first successful CI run of these changes |
-| First real bot PR | Pending App activation and an eligible bot run |
+| Renovate App | Owner reported installation on 26 October; hosted execution and the selected repository grant have not been independently inspected |
+| Required checks / `main` ruleset | Desired configuration is in [the ruleset file](../../.github/rulesets/main.json); [GitHub's enforced rules](https://api.github.com/repos/YNedderhoff/kit-control/rules/branches/main) are authoritative for runtime activation |
+| First real bot PR | No open Renovate PR observed at initial CI acceptance; the next regular window is 1–7 November 2026 |
 
-Hosted installation, required-check enforcement and the first real Renovate PR must each be verified separately. CI evidence is recorded for its exact source commit after pushing; local tests alone do not establish CI success.
+Hosted installation, required-check enforcement and the first real Renovate PR must each be verified separately. A successful implementation CI run does not establish hosted bot operation.
 
-Read current external state rather than inferring it from this pre-activation snapshot: `gh api repos/YNedderhoff/kit-control/rules/branches/main` returns enforced rules, and `gh api repos/YNedderhoff/kit-control/vulnerability-alerts --silent` succeeds when alerts are enabled. A required-status-check rule blocks failed/missing checks; configuration readback is distinct from an actual rejected-merge test, which needs a real PR. Do not create a test PR without owner authorization.
+Read current external state rather than inferring it from Git: `gh api repos/YNedderhoff/kit-control/rules/branches/main` returns enforced rules, and `gh api repos/YNedderhoff/kit-control/vulnerability-alerts --silent` succeeds when alerts are enabled. A required-status-check rule blocks failed/missing checks; configuration readback is distinct from an actual rejected-merge test, which needs a real PR. Do not create a test PR without owner authorization.
 
 ## Tool references
 
