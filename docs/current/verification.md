@@ -17,8 +17,22 @@ This record distinguishes implemented behavior, automated checks, native runtime
 | Native TD-27 GUI/client integration | Built app read the packet emulator, changed tempo 120 to 126 and enabled the snare compressor, displayed addresses `04 00 00 2E` and `04 01 41 01`, applied, and returned 2 sent / 2 verified / 2 total |
 | Native offline workspace | Earlier app run changed snare tuning 0 to 7, reviewed/applied against the document simulator, and saved a five-file workspace; the resulting kit file contained tuning 7 |
 | Linux / Windows | CLI and desktop packaging passed for the CI source revision below; physical MIDI, install and GUI runtime remain unverified |
-| Physical Roland or other module | No physical transfer or recovery test; firmware of the personal TD-27 remains unknown |
+| Physical Roland or other module | No physical transfer or recovery test; private display observations are preparation evidence only |
 | Save recovery | Process-interruption paths covered; power loss, full SD backup restoration, and sample recovery not tested |
+
+## Read-only session preparation
+
+On 26 October 2026, source commit `464d293a9052365d695eb4ed88155a865426d41b` was checked with Rust 1.99.1 before the documentation changes that add the backup gate and private report template. No application source changed for this preparation.
+
+| Command | Result and boundary |
+| --- | --- |
+| `cargo test -p kitcontrol-core --test td27 --locked` | 27 passed, 0 failed; 1 native virtual-CoreMIDI test ignored. Independent protocol mock only, no physical ports |
+| `cargo test -p kitcontrol-cli --test td27_commands --locked` | 5 passed, 0 failed; CLI subprocesses with synthetic emulator data, no physical ports |
+| `cargo build -p kitcontrol-cli --release --locked` | Passed; CLI version/help and binary SHA-256 recorded privately, no device access |
+
+The native virtual-CoreMIDI test was not rerun for this preparation. It includes writes to virtual endpoints and has separate earlier evidence above. No physical discovery, identity/read operation, SD write, backup creation, remote data repository creation, private-data upload or restore was performed. The selected session remains blocked until the [backup gate](hardware-test-protocol.md#backup-gate) passes. Source implementation, automatic tests, file retrieval and physical evidence remain separate; later CI must be inspected for its exact documentation commit.
+
+Documentation validation checked 155 local Markdown links/anchors across 28 files. Independent review of the preparation against the CLI/core contracts and accepted decisions found no actionable issue. Personal readiness facts were recorded outside the public app repository; this is not a backup or hardware result.
 
 ## CI evidence
 
