@@ -19,6 +19,7 @@ The initial research pass ran on 25 October 2026. Search terms included `TD-27 e
 | [Tauri mobile plugins](https://v2.tauri.app/develop/plugins/develop-mobile/) | Future platform boundary; no mobile implementation or device evidence |
 | [midir 0.11.1 documentation](https://docs.rs/midir/0.11.1/midir/) | Native MIDI input/output dependency; connection and port APIs |
 | [cargo-about](https://embarkstudios.github.io/cargo-about/) | Established third-party Rust notice generator |
+| [Renovate documentation](https://docs.renovatebot.com/), [smol-toml](https://github.com/squirrelchat/smol-toml), [Handlebars](https://handlebarsjs.com/), and [spdx-satisfies](https://github.com/jslicense/spdx-satisfies.js) | Dependency-maintenance tooling checked 26 October 2026. Existing license generators plus TOML parsing, deterministic template rendering and complete SPDX expression evaluation; development dependencies only. See the [operating guide](dependencies.md) for activation and verification limits |
 | [Mozilla MPL-2.0](https://www.mozilla.org/en-US/MPL/2.0/) and [FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/) | Conditions for distributing unmodified MPL dependencies as part of a larger work; checked 26 October 2026 |
 | [Tridium kitControl material](https://pages1.tridium.com/rs/808-SGM-271/images/Web_and_Mobile_UI.pdf) and [KitControl facility software](https://kitcontrol.com.br/) | Existing name uses found in preliminary web search; no trademark conclusion |
 

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "enabledManagers": ["cargo", "npm", "github-actions", "rust-toolchain", "nvm"],
+  "timezone": "Europe/Berlin",
+  "schedule": ["* * 1-7 * *"],
+  "updateNotScheduled": true,
+  "minimumReleaseAge": "7 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "internalChecksFilter": "strict",
+  "dependencyDashboard": false,
+  "automerge": false,
+  "platformAutomerge": false,
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "separateMajorMinor": true,
+  "ignoreUnstable": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["* * 1-7 * *"],
+    "groupName": "lockfile maintenance"
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "automerge": false,
+    "groupName": null,
+    "schedule": [],
+    "minimumReleaseAge": null,
+    "prCreation": "immediate",
+    "vulnerabilityFixStrategy": "lowest",
+    "prConcurrentLimit": 0
+  },
+  "packageRules": [
+    { "matchManagers": ["cargo"], "rangeStrategy": "update-lockfile" },
+    { "matchManagers": ["npm"], "rangeStrategy": "pin" },
+    {
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Rust dependencies"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "frontend dependencies"
+    },
+    { "matchManagers": ["github-actions"], "pinDigests": true },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest"],
+      "groupName": "GitHub Actions"
+    },
+    { "matchUpdateTypes": ["major"], "groupName": null },
+    {
+      "matchManagers": ["cargo", "npm"],
+      "matchPackageNames": ["tauri", "tauri-build", "@tauri-apps/api", "@tauri-apps/cli"],
+      "groupName": "Tauri"
+    },
+    {
+      "matchManagers": ["cargo", "npm"],
+      "matchCurrentVersion": "/^[~^]?0\\./",
+      "matchUpdateTypes": ["minor", "major"],
+      "groupName": null
+    },
+    { "matchManagers": ["rust-toolchain", "nvm"], "groupName": null }
+  ]
+}

@@ -14,3 +14,4 @@ These undated pages describe existing behavior, operating procedures and explici
 - [Research and primary source register](sources.md).
 - [Acknowledgements and incorporation register](acknowledgements.md).
 - [Dependency notice maintenance](third-party.md).
+- [Dependency updates and GitHub activation](dependencies.md).

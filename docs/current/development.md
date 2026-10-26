@@ -40,6 +40,8 @@ The local Rust installation, npm dependencies and build products are not part of
 
 Use the pinned toolchains and lockfiles. Run the checks relevant to the change; for application changes the CI workflow checks the frontend build/tests, Rust formatting, Clippy and workspace tests before packaging. See the [workflow](../../.github/workflows/checks.yml) for exact commands. The [verification record](verification.md) describes the separate macOS virtual-CoreMIDI test and its OS-service requirement.
 
+Dependency changes also use the [maintenance workflow](dependencies.md) and [notice commands](third-party.md). Run `npm --prefix apps/desktop run test:maintenance` for the helper integration tests. The separate `dependency-checks` CI job validates Renovate and verifies distribution assets before all three builds. The validator runs in a version- and digest-pinned container so its runtime does not add a second application Node pin.
+
 For documentation moves, check every link/anchor and plain source-path reference, preserve requirement/decision/evidence coverage, and inspect the final diff. A documentation migration is not a new software or physical-hardware verification. After an authorized push inspect CI for the exact pushed commit and report its real status.
 
 Preserve unrelated user changes. Local toolchains and build products are reproducible; personal kit data and native backups need protected storage outside this repository.

@@ -13,7 +13,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dependency-checks:
+    name: dependency-checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - name: Activate project Rust toolchain
+        run: rustc --version
+      - name: Install locked frontend dependencies
+        run: npm --prefix apps/desktop ci
+      - name: Test maintenance tools
+        run: npm --prefix apps/desktop run test:maintenance
+      # The image supplies Renovate's supported runtime independently of .nvmrc.
+      - name: Validate Renovate configuration
+        uses: docker://ghcr.io/renovatebot/renovate:44.182.0@sha256:17f13854b7cb739f9a1b041ce5eb5835a16e03ac2301872c6cc771a3f95c669a
+        with:
+          entrypoint: renovate-config-validator
+          args: --strict .github/renovate.json
+      - name: Install pinned cargo-about
+        shell: bash
+        run: |
+          version=$(node -p "require('./apps/desktop/package.json').kitcontrolMaintenance.cargoAboutVersion")
+          cargo install cargo-about --version "$version" --locked --features cli
+      - name: Check distribution notices and sources
+        run: npm --prefix apps/desktop run third-party:check
+
   build:
+    needs: dependency-checks
     name: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -34,10 +66,8 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: apps/desktop/package-lock.json
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
-        with:
-          toolchain: 1.99.1
-          components: rustfmt, clippy
+      - name: Activate project Rust toolchain
+        run: rustc --version
       - name: Install Linux desktop dependencies
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libasound2-dev libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev

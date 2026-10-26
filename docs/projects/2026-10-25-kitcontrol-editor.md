@@ -23,6 +23,7 @@ Kit editing precedes broader module editing. The working name is KitControl; the
 - [Independent implementation and selective reuse](../adrs/2026-10-25-independent-implementation.md).
 - [Local edits, transfer boundaries and Sandbox](../adrs/2026-10-25-local-edit-and-transfer-model.md).
 - [Documentation lifecycle](../adrs/2026-10-26-documentation-lifecycle.md).
+- [Monthly dependency maintenance](../adrs/2026-10-26-dependency-maintenance.md).
 
 These records preserve accepted decisions; they do not authorize unrequested implementation, hardware writes or publication. Future open architecture questions belong in [RFCs](../rfcs/README.md).
 
@@ -143,6 +144,8 @@ IDs refer to the [MVP requirements](2026-10-25-kitcontrol-editor.md#mvp-acceptan
 The initial native profile accepts the caller-declared firmware string `2.00`. Universal identity revision bytes do not establish the installed firmware. Native snapshots comprise one Kit Common block and twelve Pad blocks; they expose name, tempo, kit switches and pad compressor switches. This is a partial parameter editor with a real native MIDI path, not a complete kit editor or a complete backup.
 
 ## Next bounded task
+
+Dependency maintenance is an approved M0/M2 maintenance prerequisite, separate from native-editor/hardware acceptance. Renovate policy, local notice/source refresh, independent helper tests and the CI gate are implemented and passed local checks and independent review. Acceptance still requires three-platform CI, GitHub App/ruleset activation and inspection of the first real bot PR. Alerts are enabled. The [dependency operating guide](../current/dependencies.md#verification-and-external-state) owns verification and external state; this task does not close M2 or change physical support claims.
 
 Complete the first session's [backup gate](../current/hardware-test-protocol.md#backup-gate): preserve originals, create a separately authorized current native backup including user samples, and verify local and privately uploaded copies by independent retrieval. A private Git/LFS data repository is the selected storage approach; remote creation and concrete uploads still need owner approval. No physical port discovery or parameter access may precede the completed gate.
 
