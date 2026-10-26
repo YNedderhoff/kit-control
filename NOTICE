@@ -8,7 +8,7 @@ Version 2.0. See LICENSE.
 KitControl is an independent project. Roland and referenced product names
 belong to their respective owners. No affiliation or endorsement is claimed.
 
-Research inspiration is recorded in ACKNOWLEDGEMENTS.md. No third-party
-code, protocol tables, schemas, samples, or device data were incorporated
-from those research sources in the initial synthetic implementation.
+Research inspiration is recorded at:
+https://github.com/YNedderhoff/kit-control/blob/main/docs/current/acknowledgements.md
+No author code from those researched editor projects has been incorporated.
 Third-party package dependencies retain their own licenses and notices.

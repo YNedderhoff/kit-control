@@ -13,4 +13,4 @@ KitControl is inspired by existing drum-editor projects and community discussion
 
 No author code from the researched drum-editor projects is incorporated. The TD-27 MIDI client is independently written against the documented interface. Public emulator parameter values are invented; no manuals, graphics, firmware, samples, purchased kits, or personal backups are bundled. Ordinary package dependencies retain their own licenses.
 
-Before future incorporation, add the upstream URL, exact revision, files, license, changes, and required notices to this register. Retain original attribution and clearly mark modified files where required. See [NOTICE](NOTICE) and the [source register](docs/sources.md).
+Before future incorporation, add the upstream URL, exact revision, files, license, changes, and required notices to this register. Retain original attribution and clearly mark modified files where required. See [NOTICE](../../NOTICE) and the [source register](sources.md).

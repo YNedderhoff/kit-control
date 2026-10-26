@@ -1,6 +1,6 @@
 # Source register
 
-These links record research context. They do not authorize copying or establish KitControl compatibility. Exact source revisions for software research are in [ACKNOWLEDGEMENTS.md](../ACKNOWLEDGEMENTS.md).
+These links record research context. They do not authorize copying or establish KitControl compatibility. Exact source revisions for software research are in [acknowledgements](acknowledgements.md).
 
 The initial research pass ran on 25 October 2026. Search terms included `TD-27 editor software`, `VDrumLib`, `V-Drum Explorer`, `Roland Editor Drummerforum`, and GitHub repository searches for `VDrumExplorer` and `roland TD`. German and English community material supplied the relevant needs evidence; French-language search found historical VDrumLib licensing discussion. This is a qualitative search, not a complete market survey. Links that timed out are recorded as unknown, not as evidence of absence.
 

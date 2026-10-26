@@ -1,6 +1,6 @@
 # Hardware test protocol
 
-This procedure has not been executed against a physical module. It implements the bounded feasibility test in the [development plan](plan.md#11-bounded-hardware-feasibility-test). The [roadmap](roadmap.md) identifies implemented scope and missing features. The next task is session planning and initially read-only work, not automatic progression through every phase below.
+This procedure has not been executed against a physical module. It implements the bounded feasibility test in the [editor project](../projects/2026-10-25-kitcontrol-editor.md#hardware-feasibility-acceptance). The [implementation audit](../projects/2026-10-25-kitcontrol-editor.md#implementation-audit) identifies implemented scope and missing features. Start this procedure with session planning and read-only work; do not progress automatically through every phase below.
 
 Native MIDI, Sandbox and the virtual-CoreMIDI test share protocol paths, but only physical tests can establish the connected module's behavior. The current partial snapshot is not a complete kit, module or sample backup.
 

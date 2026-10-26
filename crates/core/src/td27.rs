@@ -1,5 +1,5 @@
 //! Original implementation of the TD-27 v2.00 documented MIDI interface.
-//! Source and implemented scope: docs/sources.md and docs/support.md.
+//! Source and implemented scope: docs/current/sources.md and docs/current/support.md.
 use crate::error::{Error, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};

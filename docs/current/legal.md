@@ -20,8 +20,16 @@ The [Roland Germany terms](https://www.roland.com/de/terms_of_use/) describe sof
 | Hardware captures and user files | Keep outside public fixtures; review owner permission, redaction, and provenance before any publication |
 | Borrowed code | Review exact revision and file license, document changes, and preserve required notices before incorporation |
 
-Record a specific rights concern with its source, affected artifact, intended use, responsible decision, and distribution restriction. Obtain qualified advice where needed. Do not use unsupported legal conclusions to claim either universal permission or a universal implementation ban.
+Record a specific rights concern with its source and retrieval date, affected artifact, intended use, rationale, limits, responsible decision, and distribution restriction. Obtain qualified advice where needed. Do not use unsupported legal conclusions to claim either universal permission or a universal implementation ban.
+
+## Material and distribution boundaries
+
+Do not analyze or modify firmware, bypass protection, incorporate a complete instrument catalog without a reviewed basis, or implement proprietary SD-backup editing in the MVP. Use brands for factual compatibility descriptions in an independent design. Contacting Roland needs separate owner authorization.
+
+A concrete unresolved restriction stops the affected action or incorporation until resolved. It does not automatically halt unrelated independently written interface code. If public distribution presents a concrete issue, assess alternatives with the owner; making a repository private does not itself establish legality. Do not create a remote private-data repository or change publication settings without the owner's instruction.
+
+For incorporations record source URL, exact commit/files, license, retained notices and modifications; a translation remains an incorporation. Preserve required copyright/license/NOTICE texts in source and distributions. These requirements do not imply a public credit on every use. The incorporation register and package notices supply the actual records.
 
 ## Dependencies and attribution
 
-No author code from the researched drum-editor projects is incorporated. Original protocol code uses the documented interface; public emulator values are invented. Package dependencies retain their own licenses. See [acknowledgements](../ACKNOWLEDGEMENTS.md), [source register](sources.md), and [third-party notices](../third-party/README.md). Dependency review does not establish rights to unrelated manufacturer material.
+No author code from the researched drum-editor projects is incorporated. Original protocol code uses the documented interface; public emulator values are invented. Package dependencies retain their own licenses. See [acknowledgements](acknowledgements.md), [source register](sources.md), and [third-party notices](../../third-party/README.md). Dependency review does not establish rights to unrelated manufacturer material.

@@ -31,3 +31,7 @@ The [legal record](legal.md) tracks concrete provenance and publication question
 The desktop target is Tauri 2 and React on macOS, Linux, and Windows. Platform builds and installer behavior need verification on each target. A successful core test on one system does not verify the desktop application or another operating system. Mobile is planned after the desktop workflow and hardware boundaries are proven.
 
 The application identifier is `xyz.nedderhoff.kitcontrol`. Rust crate names use the `kitcontrol-` prefix; Rust has no Maven-style group namespace. The repository is `YNedderhoff/kit-control`, and its name stays generic. Roland TD-27 is the first hardware target. Other manufacturers need their own documentation, rights review and tests; no speculative manufacturer framework is implemented now.
+
+## Decision records
+
+See the accepted [architecture](../adrs/2026-10-25-application-architecture.md), [reuse](../adrs/2026-10-25-independent-implementation.md), and [local editing/transfer](../adrs/2026-10-25-local-edit-and-transfer-model.md) decisions for rationale and alternatives. The [editor project](../projects/2026-10-25-kitcontrol-editor.md) owns remaining implementation and acceptance work.
