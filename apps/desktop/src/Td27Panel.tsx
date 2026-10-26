@@ -208,7 +208,7 @@ export function Td27Panel({ client = td27Core }: { client?: Td27Client }) {
             className={`status-dot ${snapshot && !readRequired ? "" : "status-unavailable"}`}
             aria-hidden="true"
           />
-          <strong>{isEmulator ? "Packet emulator" : "Native MIDI"}</strong>
+          <strong>{isEmulator ? "Sandbox" : "Native MIDI"}</strong>
           <span className="hardware-lock">
             {isEmulator
               ? "No MIDI ports opened"
@@ -253,7 +253,7 @@ export function Td27Panel({ client = td27Core }: { client?: Td27Client }) {
                       setTransport("emulator");
                     }}
                   />
-                  Packet emulator
+                  Sandbox (TD-27 emulator)
                 </label>
               </div>
               {isEmulator ? (
@@ -264,7 +264,7 @@ export function Td27Panel({ client = td27Core }: { client?: Td27Client }) {
                     TD-27.
                   </p>
                   <label className="td-field">
-                    Emulator scenario
+                    Sandbox scenario
                     <select
                       value={fault}
                       onChange={(event) => {
@@ -593,7 +593,7 @@ export function Td27Panel({ client = td27Core }: { client?: Td27Client }) {
                 disabled={isBusy || !plan?.writes.length || readRequired}
                 onClick={applyPlan}
               >
-                2 · {isEmulator ? "Apply to emulator" : "Apply to TD-27"}
+                2 · {isEmulator ? "Apply in sandbox" : "Apply to TD-27"}
               </button>
             </div>
             {!plan && !report && (
@@ -695,7 +695,7 @@ export function Td27Panel({ client = td27Core }: { client?: Td27Client }) {
         </span>
         <span>
           {isEmulator
-            ? "Packet emulator · no hardware connection"
+            ? "Sandbox · no hardware connection"
             : "Native MIDI · manually declared firmware 2.00"}
         </span>
       </footer>

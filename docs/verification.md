@@ -7,10 +7,11 @@ This record distinguishes implemented behavior, automated checks, native runtime
 | Check | Result |
 | --- | --- |
 | Independent TD-27 packet tests | 27 passed against a test-only module mock with independent memory, framing and expectations |
-| TD-27 CLI integration | 4 real subprocess tests passed against the production packet emulator |
+| Native CoreMIDI integration | One explicit test passed through temporary virtual OS MIDI ports with the independent TD-27 mock; verified exclusive output locking, read, two writes, and final readback. Ports disappear when the test drops its connections |
+| TD-27 CLI integration | 5 real subprocess tests passed against the production packet emulator |
 | Offline core and CLI integration | 21 core tests and 12 subprocess tests passed |
-| Complete Rust workspace | All 64 tests passed; formatting and Clippy with warnings denied passed |
-| Frontend | 18 behavior tests passed; TypeScript and production bundle passed |
+| Complete Rust workspace | All 65 default tests passed; the separate native CoreMIDI test passed explicitly; formatting and Clippy with warnings denied passed |
+| Frontend | 19 behavior tests passed; TypeScript and production bundle passed |
 | macOS native package | Unsigned ARM64 app built at the final checkout location; current license texts and all five bundled MPL source archives checked against the source files and Cargo.lock |
 | Native MIDI discovery | Standalone CLI and native desktop IPC both returned zero inputs and outputs with no device attached. CoreMIDI initialization requires execution outside the restricted agent shell sandbox |
 | Native TD-27 GUI/client integration | Built app read the packet emulator, changed tempo 120 to 126 and enabled the snare compressor, displayed addresses `04 00 00 2E` and `04 01 41 01`, applied, and returned 2 sent / 2 verified / 2 total |
@@ -25,10 +26,12 @@ This record distinguishes implemented behavior, automated checks, native runtime
 
 Coverage includes directed identity and model checks; exact RQ1/DT1 bytes, checksums and ranges; kit-address carry through slot 100; the declared read scope; split, out-of-order, overlapping and missing responses; byte fragments and interleaved realtime bytes; stale and forged plans; changed native endpoints; documented name bytes; selective writes and preservation of unrelated data; disconnect after a completed write; readback failure; and final-state verification counts. The CLI tests exercise read/plan/apply, JSON errors and exit codes, filename collisions, and packet-emulator faults through the public executable.
 
+On macOS the native test creates temporary virtual MIDI endpoints and serves the independent test-only module on a worker. It exercises the actual `midir` transport and TD-27 client, rather than replacing that transport with a direct callback. Run it outside the agent shell sandbox with `cargo test -p kitcontrol-core --test td27 --locked native_coremidi_adapter_reads_writes_and_verifies_a_virtual_td27 -- --ignored --exact`. It is ignored in default runs because it needs the CoreMIDI service; the macOS CI job invokes it explicitly. No physical MIDI ports are selected.
+
 The production emulator is a useful application test mode, not the sole correctness oracle. Passing client-to-emulator roundtrips alone would not establish protocol correctness.
 
 ## Review and limits
 
 An independent review prompted fixes for native endpoint binding, documented nonprintable name bytes, stopping sends after a latched native queue overflow, and final verification counts. Regression tests cover endpoint binding, name preservation, and final read failure/mismatch. Overflow handling was reviewed in source; a physical native overflow was not induced. Re-review found no remaining actionable issue in those fixes. Earlier storage review prompted atomic no-clobber creation, mismatch-injection and journal-ordering fixes. The first macOS CI run exposed a numeric input lifecycle race in the offline editor. Numeric fields now reset by committed-value keys, without a competing passive effect. A delayed-core regression covers the first edit, pending state, undo/redo and load; the complete frontend suite passed twice after the fix. The rebuilt native app also accepted a first tuning edit from 0 to 9 and Undo restored 0.
 
-The snapshot covers only Kit Common and twelve Pad blocks. It is neither a complete kit nor a sample backup. No physical module is attached. Native MIDI packet delivery, module persistence, real-world timing, and restoration remain unverified until the [hardware procedure](hardware-test-protocol.md) runs. Port names and baseline equality do not provide a unique physical serial identity or atomic device transactions. Screenshots and mocked UI tests do not prove hardware compatibility; a file checksum does not prove device restoration.
+The snapshot covers only Kit Common and twelve Pad blocks. It is neither a complete kit nor a sample backup. No physical module is attached. Delivery to a physical module, module persistence, USB/DIN timing, and restoration remain unverified until the [hardware procedure](hardware-test-protocol.md) runs. Port names and baseline equality do not provide a unique physical serial identity or atomic device transactions. Screenshots and mocked UI tests do not prove hardware compatibility; a file checksum does not prove device restoration.

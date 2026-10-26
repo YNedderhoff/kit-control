@@ -107,7 +107,7 @@ function reply(result: unknown) {
 }
 async function readEmulator() {
   render(<Td27Panel />);
-  fireEvent.click(screen.getByRole("radio", { name: "Packet emulator" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Sandbox (TD-27 emulator)" }));
   fireEvent.click(screen.getByRole("button", { name: "Read kit" }));
   await screen.findByRole("textbox", { name: "Kit name" });
   await waitFor(() =>
@@ -230,7 +230,7 @@ describe("TD-27 device integration", () => {
       request: { action: "td27_read", target: emulatorTarget, kit: 1 },
     });
     await planTempo();
-    fireEvent.click(screen.getByRole("button", { name: /Apply to emulator/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Apply in sandbox/ }));
     await screen.findByText("Readback verified");
     expect(mockedInvoke).toHaveBeenNthCalledWith(3, "dispatch", {
       request: {
@@ -263,7 +263,7 @@ describe("TD-27 device integration", () => {
     });
     expect(screen.queryByText("1 planned write")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Apply to emulator/ }),
+      screen.getByRole("button", { name: /Apply in sandbox/ }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: /Plan changes/ }));
     await screen.findByText("1 planned write");
@@ -274,13 +274,28 @@ describe("TD-27 device integration", () => {
       screen.queryByRole("textbox", { name: "Kit name" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Apply to emulator/ }),
+      screen.getByRole("button", { name: /Apply in sandbox/ }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Read kit" }));
     await screen.findByRole("heading", { name: "Kit 2" });
     expect(mockedInvoke).toHaveBeenLastCalledWith("dispatch", {
       request: { action: "td27_read", target: emulatorTarget, kit: 2 },
     });
+  });
+
+  it("clears sandbox state and its plan before switching to native MIDI", async () => {
+    mockedInvoke
+      .mockResolvedValueOnce(reply(snapshot))
+      .mockResolvedValueOnce(reply(plan));
+    await readEmulator();
+    await planTempo();
+    expect(screen.getByRole("button", { name: /Apply in sandbox/ })).toBeEnabled();
+    fireEvent.click(screen.getByRole("radio", { name: "Native MIDI" }));
+    expect(screen.queryByText("1 planned write")).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: "Kit name" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Apply to TD-27/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Read kit" })).toBeDisabled();
+    expect(mockedInvoke).toHaveBeenCalledTimes(2);
   });
 
   it("reports a core read error without creating editable device state", async () => {
@@ -290,7 +305,7 @@ describe("TD-27 device integration", () => {
       error: { code: "midi_timeout", message: "No matching identity reply" },
     });
     render(<Td27Panel />);
-    fireEvent.click(screen.getByRole("radio", { name: "Packet emulator" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Sandbox (TD-27 emulator)" }));
     fireEvent.click(screen.getByRole("button", { name: "Read kit" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "No matching identity reply (midi_timeout)",
@@ -300,7 +315,7 @@ describe("TD-27 device integration", () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Readback verified")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Apply to emulator/ }),
+      screen.getByRole("button", { name: /Apply in sandbox/ }),
     ).toBeDisabled();
   });
 
@@ -319,14 +334,14 @@ describe("TD-27 device integration", () => {
       .mockResolvedValueOnce(reply(partial));
     await readEmulator();
     await planTempo();
-    fireEvent.click(screen.getByRole("button", { name: /Apply to emulator/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Apply in sandbox/ }));
     await screen.findByText("Apply partial");
     expect(screen.getByText("1 written · 0 verified · 1 total")).toBeVisible();
     expect(screen.getByRole("spinbutton", { name: "Tempo" })).toHaveValue(125);
     expect(screen.getByRole("spinbutton", { name: "Tempo" })).toBeDisabled();
     expect(screen.getByRole("button", { name: /Plan changes/ })).toBeDisabled();
     expect(
-      screen.getByRole("button", { name: /Apply to emulator/ }),
+      screen.getByRole("button", { name: /Apply in sandbox/ }),
     ).toBeDisabled();
     expect(screen.queryByText("Readback verified")).not.toBeInTheDocument();
     expect(
@@ -344,11 +359,11 @@ describe("TD-27 device integration", () => {
     await readEmulator();
     await planTempo();
     fireEvent.change(
-      screen.getByRole("combobox", { name: "Emulator scenario" }),
+      screen.getByRole("combobox", { name: "Sandbox scenario" }),
       { target: { value: "readback_mismatch" } },
     );
     expect(
-      screen.getByRole("button", { name: /Apply to emulator/ }),
+      screen.getByRole("button", { name: /Apply in sandbox/ }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: /Plan changes/ }));
     await screen.findByText("1 planned write");

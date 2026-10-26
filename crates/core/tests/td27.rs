@@ -758,3 +758,100 @@ fn final_snapshot_mismatch_counts_actual_matching_fields_after_a_field_reverted(
     assert_eq!(actual.parameters["kit.tempo_enabled"], true);
     assert_eq!(actual.parameters["kit.tempo"], 140);
 }
+
+/// Explicit because this needs the OS CoreMIDI service, not physical hardware.
+/// The macOS CI job invokes it separately from transport-independent tests.
+#[cfg(target_os = "macos")]
+#[test]
+#[ignore = "requires native CoreMIDI service; run explicitly outside the agent sandbox"]
+fn native_coremidi_adapter_reads_writes_and_verifies_a_virtual_td27() {
+    use kitcontrol_core::midi::{self, NativeMidi};
+    use midir::{
+        Ignore, MidiInput, MidiOutput,
+        os::unix::{VirtualInput, VirtualOutput},
+    };
+    use std::sync::mpsc;
+
+    let suffix = format!(
+        "{}-{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    );
+    let source_name = format!("KitControl test TD27 source {suffix}");
+    let destination_name = format!("KitControl test TD27 destination {suffix}");
+    let mut output = MidiOutput::new("KitControl test TD27")
+        .unwrap()
+        .create_virtual(&source_name)
+        .unwrap();
+    let mut input = MidiInput::new("KitControl test TD27").unwrap();
+    input.ignore(Ignore::None);
+    let (sender, receiver) = mpsc::channel();
+    // Keep assertions on a worker, outside the native callback/FFI boundary.
+    let mock_input = input
+        .create_virtual(
+            &destination_name,
+            move |_, bytes, _| {
+                let _ = sender.send(bytes.to_vec());
+            },
+            (),
+        )
+        .unwrap();
+    let worker = std::thread::spawn(move || {
+        let mut module = Module::new([4, 0, 0, 0]);
+        while let Ok(packet) = receiver.recv() {
+            module.send(&packet).unwrap();
+            while let Some(reply) = module.incoming.pop_front() {
+                output.send(&reply).unwrap();
+            }
+        }
+        module
+    });
+    let available = midi::ports().unwrap();
+    let inputs: Vec<_> = available
+        .inputs
+        .iter()
+        .filter(|name| name.contains(&source_name))
+        .collect();
+    let outputs: Vec<_> = available
+        .outputs
+        .iter()
+        .filter(|name| name.contains(&destination_name))
+        .collect();
+    assert_eq!(inputs.len(), 1);
+    assert_eq!(outputs.len(), 1);
+    let transport = NativeMidi::open(inputs[0], outputs[0]).unwrap();
+    let mut client = Td27Client::new(transport, 16, "2.00".into()).unwrap();
+    assert!(
+        matches!(NativeMidi::open(inputs[0], outputs[0]), Err(error) if error.code == "device_busy")
+    );
+    let read = client.read_kit(1).unwrap();
+    assert!(!read.simulated);
+    assert_eq!(read.parameters["kit.tempo"], json!(123));
+    assert_eq!(
+        read.endpoint,
+        Some(MidiEndpoint {
+            input: inputs[0].clone(),
+            output: outputs[0].clone()
+        })
+    );
+    let changes = BTreeMap::from([
+        ("kit.tempo".into(), json!(126)),
+        ("pad.kick.compressor_enabled".into(), json!(true)),
+    ]);
+    let plan = td27::plan(&read, &changes).unwrap();
+    let report = client.apply(&plan).unwrap();
+    assert_eq!(report.status, "verified");
+    assert_eq!((report.written, report.verified, report.total), (2, 2, 2));
+    let final_state = report.snapshot.unwrap();
+    assert_eq!(final_state.blocks[0].data[46..50], [0, 0, 7, 14]);
+    assert_eq!(final_state.blocks[1].data[1], 1);
+    drop(client);
+    drop(mock_input);
+    let module = worker.join().unwrap();
+    assert_eq!(module.write_attempts, 2);
+    assert_eq!(module.memory[&number(&[4, 0, 0, 49])], 14);
+    assert_eq!(module.memory[&number(&[4, 1, 64, 1])], 1);
+}

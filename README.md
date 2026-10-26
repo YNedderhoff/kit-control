@@ -16,6 +16,14 @@ The repository name stays manufacturer-neutral. The first hardware adapter targe
 
 Offline edits never imply a device write. Native apply rereads the baseline before writing. A successful emulator check provides no evidence of physical hardware compatibility.
 
+## Sandbox mode
+
+Open **TD-27 device**, select **Sandbox (TD-27 emulator)**, and click **Read kit**. Edit the synthetic parameters, review a plan, then **Apply in sandbox**. Choose a sandbox scenario to try fragmented replies, timeouts, invalid packets, disconnects, or readback mismatch.
+
+Sandbox mode uses the same TD-27 packet client as native MIDI and opens no hardware ports. Its state stays in memory for the current app session. Changing the transport or kit clears that state and its plan. A sandbox plan is marked simulated and cannot be applied to native MIDI. This is a parameter emulator, with no audio engine. It works in the packaged app; `tauri dev` is not required.
+
+For the CLI, use an explicit `{"transport":"emulator"}` target as described in the [API contract](docs/api.md).
+
 ## Development status
 
 This is an early development implementation, not a hardware-verified release. The initial TD-27 profile requires the user to confirm firmware **2.00** from the module. MIDI identity revision bytes do not establish the complete installed firmware version.

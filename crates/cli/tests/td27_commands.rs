@@ -177,3 +177,22 @@ fn given_unknown_firmware_or_parameter_when_request_then_no_silent_profile_fallb
         "unsupported_parameter"
     );
 }
+
+#[test]
+fn given_sandbox_plan_when_native_apply_requested_then_no_hardware_port_is_opened() {
+    let baseline = result(&request(json!({
+        "action":"td27_read","kit":1,"target":{"transport":"emulator"}
+    })));
+    let plan = result(&request(json!({
+        "action":"td27_plan","baseline":baseline,"changes":{"kit.tempo":126}
+    })));
+    let output = request(json!({
+        "action":"td27_apply","plan":plan,
+        "target":{"transport":"native","input":"Never open this input","output":"Never open this output","device_id":16,"firmware":"2.00"}
+    }));
+    assert_eq!(output.status.code(), Some(2));
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(response["ok"], false);
+    // The target guard executes before MIDI initialization/discovery/connect.
+    assert_eq!(response["error"]["code"], "invalid_target");
+}

@@ -56,6 +56,9 @@ jobs:
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test core, CLI and desktop boundary
         run: cargo test --workspace --locked
+      - name: Test native CoreMIDI with a virtual TD-27
+        if: runner.os == 'macOS'
+        run: cargo test -p kitcontrol-core --test td27 --locked native_coremidi_adapter_reads_writes_and_verifies_a_virtual_td27 -- --ignored --exact
       - name: Build standalone CLI
         run: cargo build -p kitcontrol-cli --release --locked
       - name: Build unsigned desktop package
