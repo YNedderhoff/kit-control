@@ -32,7 +32,7 @@ jobs:
         run: npm --prefix apps/desktop run test:maintenance
       # The image supplies Renovate's supported runtime independently of .nvmrc.
       - name: Validate Renovate configuration
-        uses: docker://ghcr.io/renovatebot/renovate:44.182.0@sha256:17f13854b7cb739f9a1b041ce5eb5835a16e03ac2301872c6cc771a3f95c669a
+        uses: docker://ghcr.io/renovatebot/renovate:44.223.1@sha256:4d82316637556d793f1c0e248e003a3842ebadecea0a9f4e9b77c12421da2122
         with:
           entrypoint: renovate-config-validator
           args: --strict .github/renovate.json
